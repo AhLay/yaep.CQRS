@@ -1,0 +1,8 @@
+temp Roadmap
+* add more tests 
+* refactor tests (reduce code duplicates)
+* refactor DI reuse code
+* simplify QueryExecuter to not need 2 generic parameters
+* add decorator capability
+* implement default extensions decorators for Logging , Caching 
+* !!importent !! this library should be as simple as possible, new features should be plugable (external nugets) and not backed into the core implementation
