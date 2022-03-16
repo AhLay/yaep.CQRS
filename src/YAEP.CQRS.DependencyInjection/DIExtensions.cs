@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using YAEP.CQRS;
-using YAEP.CQRS.Abstractions;
 using YAEP.CQRS.Abstractions.Commands;
 using YAEP.CQRS.Abstractions.Queries;
 
@@ -8,19 +7,20 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DIExtensions
     {
-        public static IServiceCollection RegisterCommands(this IServiceCollection services,Assembly assembly,ServiceLifetime lifetime = ServiceLifetime.Scoped)
+       
+        public static IServiceCollection RegisterCommands(this IServiceCollection services, Assembly assembly, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             var types = assembly.GetTypes()
-                        .Where(t => !t.IsInterface )
+                        .Where(t => !t.IsInterface)
                         .Select(t => new
                         {
                             Implementation = t,
                             Abstraction = t.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommandHandler<>))
-                        }).Where(t=> t.Abstraction.IsNotNull());
+                        }).Where(t => t.Abstraction.IsNotNull());
 
             foreach (var type in types)
             {
-                services.Add(new ServiceDescriptor(type.Abstraction, type.Implementation,lifetime));
+                services.Add(new ServiceDescriptor(type.Abstraction, type.Implementation, lifetime));
             }
 
             services.Add(new ServiceDescriptor(typeof(ICommandExecuter), typeof(CommandExecuter), lifetime));
@@ -38,7 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             Abstraction = t.GetInterfaces()
                             .FirstOrDefault(i => i.IsGenericType
                                               && i.GetGenericTypeDefinition() == typeof(IQueryHandler<,>))
-                        }).Where(t => t.Abstraction.IsNotNull());
+                        }).Where(t => t.Abstraction.IsNotNull()).ToArray();
 
             foreach (var type in types)
             {
@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection RegisterCommands(this IServiceCollection services,Assembly[] assemblies)
+        public static IServiceCollection RegisterCommands(this IServiceCollection services, Assembly[] assemblies)
         {
             foreach (var assembly in assemblies)
             {

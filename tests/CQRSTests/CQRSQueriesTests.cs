@@ -33,7 +33,7 @@ namespace CQRSTests
             var serviceProvider = services.BuildServiceProvider();
             var dispatcher = serviceProvider.GetRequiredService<IQueryExecuter>();
 
-            var result = await dispatcher.Fetch<FakeQuery,Person>(new FakeQuery("test"), CancellationToken.None);
+            var result = await dispatcher.Fetch(new FakeQuery("test"), CancellationToken.None);
 
             result.Name.Should().Be("test");
         }

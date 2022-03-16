@@ -2,7 +2,6 @@
 {
     public interface IQueryExecuter
     {
-        Task<TResult> Fetch<TQuery,TResult>(TQuery query, CancellationToken cancellationToken)
-            where TQuery : IQuery<TResult>;
+        Task<TResult> Fetch<TResult>(IQuery<TResult> query, CancellationToken cancellationToken);
     }
 }
